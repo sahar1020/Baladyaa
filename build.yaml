@@ -1,0 +1,38 @@
+targets:
+  $default:
+    builders:
+      source_gen:combining_builder:
+        options:
+          preamble: |
+            // coverage:ignore-file
+
+      json_serializable:
+        options:
+          explicit_to_json: true
+          field_rename: snake
+
+      freezed:
+        options:
+          format: true
+
+      flutter_gen_runner:
+        options:
+          output: lib/core/gen/
+          line_length: 80
+
+      injectable_generator:injectable_builder:
+        options:
+          auto_register: true
+          # auto registers any class ends with (Service, Repository, Bloc)
+          class_name_pattern:
+            "Service$|Repository$|Bloc$|Cubit$"
+
+      auto_route_generator:auto_route_generator:
+        options:
+          enable_cached_builds: true
+
+      auto_route_generator:auto_router_generator:
+        options:
+          enable_cached_builds: true
+        generate_for:
+          - lib/core/router/router.dart
