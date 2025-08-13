@@ -1,91 +1,10 @@
 import 'package:albaladyaa/core/extensions/build_context.dart';
 import 'package:albaladyaa/core/gen/assets.gen.dart';
+import 'package:albaladyaa/feature/auth/ui/widgets/password_text_field.dart';
+import 'package:albaladyaa/feature/auth/ui/widgets/phone_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_svg/svg.dart';
-
-class CustomTextField extends StatelessWidget {
-  final String hintText;
-  final String helperText;
-  final IconData prefixIcon;
-  final IconData? suffixIcon;
-  final bool obscureText;
-  final TextInputType keyboardType;
-  final ValueChanged<String>? onChanged;
-
-  const CustomTextField({
-    super.key,
-    required this.hintText,
-    required this.helperText,
-    required this.prefixIcon,
-    this.suffixIcon,
-    this.obscureText = false,
-    this.keyboardType = TextInputType.text,
-    this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        prefixIcon: Icon(prefixIcon),
-        suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
-        hintText: hintText,
-        hintStyle: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          letterSpacing: 0.5,
-          color: const Color(0xFF454652),
-        ),
-        helperText: helperText,
-        helperStyle: TextStyle(
-          fontSize: 16,
-          letterSpacing: 0.5,
-          color: const Color(0xFF454652),
-        ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-    );
-  }
-}
-
-class PhoneTextField extends StatelessWidget {
-  final ValueChanged<String>? onChanged;
-
-  const PhoneTextField({super.key, this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomTextField(
-      hintText: context.l10n.phone_number,
-      helperText: context.l10n.please_enter_your_phone_number,
-      prefixIcon: Icons.phone,
-      keyboardType: TextInputType.phone,
-      onChanged: onChanged,
-    );
-  }
-}
-
-class PasswordTextField extends StatelessWidget {
-  final ValueChanged<String>? onChanged;
-
-  const PasswordTextField({super.key, this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomTextField(
-      hintText: context.l10n.password,
-      helperText: context.l10n.please_enter_password,
-      prefixIcon: Icons.lock,
-      suffixIcon: Icons.visibility_off,
-      obscureText: true,
-      onChanged: onChanged,
-    );
-  }
-}
 
 @RoutePage()
 class LoginScreen extends StatelessWidget {
