@@ -1,6 +1,8 @@
+import 'package:albaladyaa/core/l10n/localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:albaladyaa/core/di/di.dart';
-import 'package:albaladyaa/core/router/router.dart'; 
+import 'package:albaladyaa/core/router/router.dart';
 
 void main() {
   configureDependencies();
@@ -18,9 +20,14 @@ class MyApp extends StatelessWidget {
       routeInformationParser: router.defaultRouteParser(),
       debugShowCheckedModeBanner: false,
       title: 'Albaladyaa App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }
