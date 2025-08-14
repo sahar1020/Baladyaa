@@ -1,4 +1,5 @@
 import 'package:albaladyaa/core/l10n/localizations.dart';
+import 'package:albaladyaa/core/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:albaladyaa/core/di/di.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       routeInformationParser: router.defaultRouteParser(),
       debugShowCheckedModeBanner: false,
       title: 'Albaladyaa App',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: lightTheme(context),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

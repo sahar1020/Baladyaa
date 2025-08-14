@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 
 class PasswordTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
+  final String? helperText;
 
-  const PasswordTextField({super.key, this.onChanged});
+  const PasswordTextField({super.key, this.onChanged, this.helperText});
 
   @override
   Widget build(BuildContext context) {
     return CustomTextField(
       hintText: context.l10n.password,
-      helperText: context.l10n.please_enter_password,
+      helperText: helperText,
       prefixIcon: Icons.lock,
       suffixIcon: Icons.visibility_off,
       obscureText: true,

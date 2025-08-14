@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../core/router/router.dart';
+import '../../../../core/router/router.gr.dart';
+
 @RoutePage()
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -21,11 +24,11 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 95),
+                const SizedBox(height: 75),
                 SvgPicture.asset(
                   Assets.icons.appIcon.path,
-                  height: 225,
-                  width: 380,
+                  height: 113,
+                  width: 113,
                 ),
 
                 const SizedBox(height: 12),
@@ -56,32 +59,33 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 const PasswordTextField(),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 40,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: context.colorScheme.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 40,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF101F79),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
                       ),
-                      onPressed: () {},
-                      child: Text(
-                        context.l10n.login,
-                        style: TextStyle(fontSize: 16),
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      context.l10n.login,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: context.colorScheme.onPrimary,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+
+                const SizedBox(height: 32),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
                       context.l10n.dont_have_account,
@@ -92,7 +96,9 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        router.replace(LoginRoute());
+                      },
                       child: Text(
                         context.l10n.join_now,
                         style: TextStyle(
@@ -106,7 +112,6 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
               ],
             ),
           ),

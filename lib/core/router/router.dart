@@ -12,7 +12,9 @@ class MunicipalityRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes {
     return [
-      AutoRoute(initial: true, page: LoginRoute.page),
+      AutoRoute(page: LoginRoute.page),
+      AutoRoute(page: RegisterRoute.page),
+      AutoRoute(initial: true, page: OtpRoute.page),
     ];
   }
 }

@@ -26,6 +26,7 @@
   "incorrect_code": "الرمز غير صحيح، يرجى التحقق والمحاولة مجددًا.",
   "expired_code": "رمز التحقق منتهي الصلاحية. ",
   "request_new_code": "طلب رمز جديد.",
+  "retype_your_password": "اعد كتابة كلمة المرور",
   "remaining_time": "{duration} دقيقة متبقية.",
   "@remaining_time": {
     "placeholders": {
