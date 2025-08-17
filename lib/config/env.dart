@@ -1,3 +1,3 @@
-class Env {
-  static const String apiUrl = 'https://api.example.com';
+abstract interface class Env {
+  String get apiUrl;
 }

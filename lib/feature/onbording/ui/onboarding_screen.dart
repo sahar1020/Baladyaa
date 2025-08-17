@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../../core/extensions/build_context.dart';
 import '../../../core/gen/assets.gen.dart';
-import '../../../core/router/router.dart';
 import '../../../core/router/router.gr.dart';
 import '../model/onboarding_model.dart';
 import '../widget/onboarding_buttons.dart';
@@ -37,7 +36,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _completeOnboarding() {
-    router.replace(LoginRoute());
+context.router.replace(const LoginRoute());
   }
 
   @override

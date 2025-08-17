@@ -12,7 +12,7 @@ class PhoneTextField extends StatelessWidget {
     return CustomTextField(
       hintText: context.l10n.phone_number,
       helperText: context.l10n.please_enter_your_phone_number,
-      prefixIcon: Icons.phone,
+      prefixIcon: Icon(Icons.phone),
       keyboardType: TextInputType.phone,
       onChanged: onChanged,
     );

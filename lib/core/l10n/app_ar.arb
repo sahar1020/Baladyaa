@@ -33,7 +33,8 @@
       "duration": {
         "type": "String"
       }
-    }
+    },
+    "new_password": "كلمة المرور الجديدة",
   },
   "reports": "البلاغات",
   "notifications": "الإشعارات",

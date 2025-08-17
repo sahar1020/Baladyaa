@@ -5,13 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 @RoutePage()
-class OtpScreen extends StatelessWidget {
-  OtpScreen({super.key});
+class OtpScreen extends StatefulWidget {
+  const OtpScreen({super.key});
 
-  final TextEditingController otp1 = TextEditingController();
-  final TextEditingController otp2 = TextEditingController();
-  final TextEditingController otp3 = TextEditingController();
-  final TextEditingController otp4 = TextEditingController();
+  @override
+  State<OtpScreen> createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends State<OtpScreen> {
+  final otp1 = TextEditingController();
+  final otp2 = TextEditingController();
+  final otp3 = TextEditingController();
+  final otp4 = TextEditingController();
+
+  bool hasError = false;
+  bool isExpired = false;
 
   Widget otpTextField(TextEditingController controller) {
     return SizedBox(
@@ -24,18 +32,45 @@ class OtpScreen extends StatelessWidget {
         textAlign: TextAlign.center,
         decoration: InputDecoration(
           counterText: "",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(4),
+            borderSide: BorderSide(
+              color: hasError ? Colors.red : Colors.grey,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(4),
+            borderSide: BorderSide(
+              color: hasError ? Colors.red : Colors.blue,
+              width: 2,
+            ),
+          ),
         ),
       ),
     );
+  }
+
+  void verifyCode() {
+    // مثال بسيط للتحقق
+    if (otp1.text == "1" && otp2.text == "2" && otp3.text == "3" && otp4.text == "4") {
+      setState(() {
+        hasError = false;
+        isExpired = false;
+      });
+    } else {
+      setState(() {
+        hasError = true;
+        // يمكن التحكم في انتهاء الصلاحية حسب التوقيت
+        isExpired = false; 
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back, color: Colors.black),
-        backgroundColor: Colors.white,
+        leading: const Icon(Icons.arrow_back, color: Colors.black),
         elevation: 0,
       ),
       body: Padding(
@@ -60,21 +95,15 @@ class OtpScreen extends StatelessWidget {
                 ),
               ),
             ),
-            // Text(
-            //   "OTP",
-            //   style: TextStyle(
-            //     fontSize: 24,
-            //     fontWeight: FontWeight.w400,
-            //     color: context.colorScheme.onSurface,
-            //   ),
-            // ),
             const SizedBox(height: 12),
             Text(
-              "أدخل رمز التحقق الذي أرسلناه إلى رقمك\n11*****092",
+              hasError
+                  ? context.l10n.incorrect_code
+                  : "${context.l10n.enter_verification_code}11*****092",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
-                color: context.colorScheme.onSurface,
+                color: hasError ? Colors.red : context.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 32),
@@ -92,7 +121,35 @@ class OtpScreen extends StatelessWidget {
                 const SizedBox(width: 70),
               ],
             ),
-            Spacer(flex: 1),
+
+if (isExpired || hasError) ...[
+  const SizedBox(height: 8),
+  Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text(
+        context.l10n.expired_code, 
+        style: TextStyle(color: context.colorScheme.onSurface),
+      ),
+      const SizedBox(width: 4),
+      InkWell(
+        onTap: () {
+          // إعادة إرسال الرمز
+        },
+        child: Text(
+          context.l10n.request_new_code,
+          style: const TextStyle(
+            color: Colors.red,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+      ),
+    ],
+  ),
+]
+
+,
+            const Spacer(flex: 1),
             SizedBox(
               width: double.infinity,
               height: 50,
@@ -103,9 +160,9 @@ class OtpScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(24),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: verifyCode,
                 child: Text(
-                  "تأكيد الرمز",
+                  context.l10n.verify_code,
                   style: TextStyle(
                     fontSize: 14,
                     color: context.colorScheme.surfaceContainerLowest,

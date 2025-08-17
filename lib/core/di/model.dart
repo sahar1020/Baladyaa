@@ -2,14 +2,21 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:rx_shared_preferences/rx_shared_preferences.dart';
-import 'package:logger/logger.dart';
 
+import '../../config/env.dart';
 import '../storage/storage.dart';
+import '../util/logger.dart';
+import 'url_dependencies.dart';
 
 
 @module
 abstract class MunicipalityModule {
-  final logger = Logger();
+
+ @Named(UrlDependencies.apiUrl)
+  String apiUrl(Env env) => env.apiUrl;
+
+  @preResolve
+  Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
 
   @lazySingleton
   RxSharedPreferences get rxPrefs => RxSharedPreferences.getInstance();

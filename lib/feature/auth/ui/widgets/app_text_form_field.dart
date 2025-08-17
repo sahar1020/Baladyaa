@@ -1,27 +1,34 @@
-import 'package:flutter/material.dart';
 import 'package:albaladyaa/core/extensions/build_context.dart';
+import 'package:flutter/material.dart';
 
 class CustomTextField extends StatefulWidget {
   final String hintText;
   final String? helperText;
-  final IconData prefixIcon;
+  final String? errorText;
+  final Widget? prefixIcon;
   final bool obscureText;
-  final IconData? suffixIcon;
-
+  final Widget? suffixIcon;
   final TextInputType keyboardType;
   final ValueChanged<String>? onChanged;
   final List<String> dropdownItems;
+  final TextEditingController? controller;
+  final bool showErrorIcon;
+  final Color? borderColor;
 
   const CustomTextField({
     super.key,
     required this.hintText,
     this.helperText,
-    required this.prefixIcon,
+    this.errorText,
+    this.prefixIcon,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.onChanged,
     this.dropdownItems = const [],
     this.suffixIcon,
+    this.controller,
+    this.showErrorIcon = false,
+    this.borderColor,
   });
 
   @override
@@ -29,84 +36,69 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  final TextEditingController _controller = TextEditingController();
-  final LayerLink _layerLink = LayerLink();
-  OverlayEntry? _overlayEntry;
+  late final TextEditingController _controller;
 
-  void _toggleDropdown() {
-    if (_overlayEntry == null) {
-      _overlayEntry = _createOverlayEntry();
-      Overlay.of(context).insert(_overlayEntry!);
-    } else {
-      _overlayEntry?.remove();
-      _overlayEntry = null;
-    }
+  @override
+  void initState() {
+    super.initState();
+    _controller = widget.controller ?? TextEditingController();
   }
 
-  OverlayEntry _createOverlayEntry() {
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
-    Size size = renderBox.size;
-    Offset offset = renderBox.localToGlobal(Offset.zero);
-
-    return OverlayEntry(
-      builder: (context) => Positioned(
-        width: size.width,
-        left: offset.dx,
-        top: offset.dy + size.height,
-        child: Material(
-          elevation: 4,
-          borderRadius: BorderRadius.circular(8),
-          child: ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
-            children: widget.dropdownItems
-                .map(
-                  (item) => ListTile(
-                    title: Text(item),
-                    onTap: () {
-                      _controller.text = item;
-                      widget.onChanged?.call(item);
-                      _toggleDropdown();
-                    },
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-      ),
-    );
+  @override
+  void dispose() {
+    if (widget.controller == null) _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: TextField(
-        controller: _controller,
-        obscureText: widget.obscureText,
-        keyboardType: widget.keyboardType,
-        onChanged: widget.onChanged,
-        readOnly: widget.hintText == "الفرع البلدي",
-        onTap: widget.hintText == "الفرع البلدي" ? _toggleDropdown : null,
-        decoration: InputDecoration(
-          prefixIcon: Icon(widget.prefixIcon),
-          suffixIcon: widget.hintText == "الفرع البلدي"
-              ? Icon(Icons.search)
-              : Icon(widget.suffixIcon),
-          hintText: widget.hintText,
-          hintStyle: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            letterSpacing: 0.5,
-            color: context.colorScheme.onSurface,
+    return TextField(
+      controller: _controller,
+      obscureText: widget.obscureText,
+      keyboardType: widget.keyboardType,
+      onChanged: widget.onChanged,
+      decoration: InputDecoration(
+        prefixIcon: widget.showErrorIcon && widget.errorText != null
+            ? Icon(Icons.error, color: context.colorScheme.error)
+            : widget.prefixIcon,
+        suffixIcon: widget.suffixIcon,
+        hintText: widget.hintText,
+        helperText: widget.errorText == null ? widget.helperText : null,
+        errorText: widget.errorText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: widget.borderColor ?? context.colorScheme.onSurfaceVariant,
+            width: 1.5,
           ),
-          helperText: widget.helperText,
-          helperStyle: TextStyle(
-            fontSize: 12,
-            letterSpacing: 0.5,
-            color: context.colorScheme.onSurface,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: widget.borderColor ?? context.colorScheme.onSurfaceVariant,
+            width: 1.5,
           ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: widget.borderColor ?? context.colorScheme.onSurfaceVariant,
+            width: 2,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: context.colorScheme.error,
+            width: 1.5,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: context.colorScheme.error,
+            width: 2,
+          ),
         ),
       ),
     );

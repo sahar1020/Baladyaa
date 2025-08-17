@@ -64,14 +64,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 CustomTextField(
                   hintText: context.l10n.name,
                   helperText: context.l10n.please_enter_your_name,
-                  prefixIcon: Icons.person,
+                  prefixIcon:Icon( Icons.person),
                   keyboardType: TextInputType.name,
                 ),
                 const SizedBox(height: 16),
 
                 CustomTextField(
                   hintText: context.l10n.municipality_branch,
-                  prefixIcon: Icons.business_outlined,
+                  prefixIcon:Icon(Icons.business_outlined) ,
 
                   // suffixIcon: Icons.search,
                   keyboardType: TextInputType.name,
