@@ -12,6 +12,8 @@ abstract class AuthRepo {
   Future<String?> getToken();
   Future<void> verifyOtp(String requestId, String code);
   Future<String> resendOtp(String phoneNumber);
+    Future<void> validateToken();
+
 }
 
 @Injectable(as: AuthRepo)
@@ -78,4 +80,16 @@ class AuthRepoImpl implements AuthRepo {
       rethrow;
     }
   }
+
+  Future<bool> validateToken() async {
+  try {
+    final token = await getToken();
+    if (token == null || token.isEmpty) return false;
+    
+  
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 }

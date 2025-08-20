@@ -3,6 +3,8 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../config/endpoints.dart';
+import '../../feature/auth/repo/auth_repo.dart';
+import '../di/di.dart';
 import '../di/url_dependencies.dart';
 import '../model/user.dart';
 import 'network_model.dart';
@@ -15,7 +17,19 @@ abstract class AuthenticationClient {
   factory AuthenticationClient(
     Dio dio, {
     @Named(UrlDependencies.apiUrl) required String baseUrl,
-  }) = _AuthenticationClient;
+  }) {
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        final token = await injector<AuthRepo>().getToken();
+        if (token != null) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
+        return handler.next(options);
+      },
+    ));
+    
+    return _AuthenticationClient(dio, baseUrl: baseUrl);
+  }
 
   @POST(Endpoints.login)
   Future<LoginResponse> login(@Body() LoginBody body);

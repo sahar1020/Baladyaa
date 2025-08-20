@@ -21,19 +21,40 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(password: password, isValid: isValid));
   }
 
-  Future<void> login() async {
-    if (!state.isValid) return;
-
-    emit(state.copyWith(submissionStatus: FormzSubmissionStatus.inProgress));
-
-    try {
-      await _repo.login(state.phone.value, state.password.value);
-      emit(state.copyWith(submissionStatus: FormzSubmissionStatus.success));
-    } catch (e) {
-      emit(state.copyWith(
-        submissionStatus: FormzSubmissionStatus.failure,
-        errorMessage: e.toString(),
-      ));
-    }
+Future<void> login() async {
+  if (!state.isValid) {
+    emit(state.copyWith(
+      errorMessage: 'الرجاء إدخال بيانات صحيحة',
+    ));
+    return;
   }
+
+  emit(state.copyWith(
+    submissionStatus: FormzSubmissionStatus.inProgress,
+    errorMessage: null,
+  ));
+
+  try {
+    await _repo.login(state.phone.value, state.password.value);
+    
+    // final isValid = await _repo.validateToken();
+    // if (!isValid) {
+    //   throw Exception('فشل في مصادقة الجلسة');
+    // }
+    
+    emit(state.copyWith(submissionStatus: FormzSubmissionStatus.success));
+  } catch (e) {
+    String errorMessage = e.toString();
+    if (errorMessage.contains('SocketException') ||
+        errorMessage.contains('Connection failed')) {
+      errorMessage = 'فشل الاتصال بالخادم. تحقق من اتصال الإنترنت';
+    }
+    
+    emit(state.copyWith(
+      submissionStatus: FormzSubmissionStatus.failure,
+      errorMessage: errorMessage,
+    ));
+  }
+}
+  
 }

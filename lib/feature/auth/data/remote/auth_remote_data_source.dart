@@ -17,35 +17,58 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   AuthRemoteDataSourceImpl(this._client);
 
-  @override
-  Future<LoginResponse> login(String username, String password) async {
-    try {
-      return await _client.login(LoginBody(
-        phone: username,
-        password: password,
-      ));
-    } on DioException catch (e) {
-      final errorMessage = e.response?.data?['message'] ?? 'فشل تسجيل الدخول';
-      throw Exception(errorMessage);
-    } catch (e) {
-      throw Exception("Login failed: $e");
+@override
+Future<LoginResponse> login(String username, String password) async {
+  try {
+    print(' Attempting login with phone: $username');
+    final response = await _client.login(LoginBody(
+      phone: username,
+      password: password,
+    ));
+    
+    print('Login successful - Token: ${response.accessToken.isNotEmpty}');
+    print('User: ${response.user.toJson()}');
+    
+    return response;
+  } on DioException catch (e) {
+    final statusCode = e.response?.statusCode;
+    final errorData = e.response?.data;
+    
+    print(' Login failed - Status: $statusCode');
+    print('❌ Error response: $errorData');
+    
+    String errorMessage;
+    if (statusCode == 401) {
+      errorMessage = 'رقم الهاتف أو كلمة المرور غير صحيحة';
+    } else if (statusCode == 404) {
+      errorMessage = 'المستخدم غير موجود';
+    } else {
+      errorMessage = errorData?['message'] ?? 
+                    errorData?['error'] ?? 
+                    'فشل تسجيل الدخول. حاول مرة أخرى';
     }
+    
+    throw Exception(errorMessage);
+  } catch (e) {
+    print('❌ Unexpected login error: $e');
+    throw Exception("فشل تسجيل الدخول: $e");
   }
+}
 
   @override
   Future<RegisterResponse> register(RegisterBody body) async {
     try {
-      print('📤 Sending register request with body: ${body.toJson()}');
+      print(' Sending register request with body: ${body.toJson()}');
       final response = await _client.register(body);
-      print('✅ REGISTER RESPONSE: ${response.toJson()}');
+      print(' REGISTER RESPONSE: ${response.toJson()}');
       return response;
     } on DioException catch (e) {
       final errorData = e.response?.data;
       final errorMessage = errorData?['message'] ?? errorData?.toString() ?? 'فشل التسجيل';
-      print('❌ REGISTER ERROR: $errorMessage');
+      print(' REGISTER ERROR: $errorMessage');
       throw Exception(errorMessage);
     } catch (e) {
-      print('⚠️ Unexpected register error: $e');
+      print('Unexpected register error: $e');
       throw Exception("Register failed: $e");
     }
   }
@@ -53,15 +76,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<VerifyResponse> verifyOtp(String requestId, String code) async {
     try {
-      print('🔐 Verifying OTP: requestId=$requestId, code=$code');
+      print(' Verifying OTP: requestId=$requestId, code=$code');
       final response = await _client.verify(VerifyBody(
         requestId: requestId,
         code: code,
       ));
       
-      print('✅ Verify OTP Success: ${response.toJson()}');
-      print('✅ Token received: ${response.accessToken.isNotEmpty}');
-      print('✅ User data: ${response.user.toJson()}');
+      print(' Verify OTP Success: ${response.toJson()}');
+      print(' Token received: ${response.accessToken.isNotEmpty}');
+      print(' User data: ${response.user.toJson()}');
       
       return response;
     } on DioException catch (e) {
@@ -78,14 +101,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<OtpResponse> resendOtp(String phoneNumber) async {
     try {
-      print('🔄 Resending OTP to: $phoneNumber');
+      print(' Resending OTP to: $phoneNumber');
       final response = await _client.resendOtp(OtpBody(phoneNumber: phoneNumber));
-      print('✅ Resend OTP Success: ${response.toJson()}');
+      print(' Resend OTP Success: ${response.toJson()}');
       return response;
     } on DioException catch (e) {
       final errorData = e.response?.data;
       final errorMessage = errorData?['message'] ?? errorData?.toString() ?? 'فشل إعادة الإرسال';
-      print('❌ Resend OTP Error: $errorMessage');
+      print('Resend OTP Error: $errorMessage');
       throw Exception(errorMessage);
     } catch (e) {
       print('❌ Resend OTP Unexpected Error: $e');

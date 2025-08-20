@@ -30,20 +30,23 @@ class LoginScreen extends StatelessWidget {
           child: BlocListener<LoginCubit, LoginState>(
             listener: (context, state) {
               if (state.submissionStatus.isSuccess) {
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Login Successful!')),
 
                 );
-                 router.replace(const ChangePasswordRoute());
-
+ Future.delayed(const Duration(milliseconds: 500), () {
+        router.replaceAll([const HomeRoute()]);
+      });
               } else if (state.submissionStatus.isFailure) {
+                
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.errorMessage ?? 'Login Failed')),
                 );
               }
             },
             child: SafeArea(
-              child: Center(
+              child: Center(  
                 child: SingleChildScrollView(
                    padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
