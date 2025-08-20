@@ -47,6 +47,7 @@ abstract class RegisterBody with _$RegisterBody {
 
   const factory RegisterBody({
     required String name,
+     required String email,
     required String phone,
     required String municipalityBranchId,
     required String password,

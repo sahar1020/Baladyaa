@@ -19,10 +19,14 @@ import 'package:albaladyaa/core/router/router.dart' as _i145;
 import 'package:albaladyaa/core/storage/sharde_prefrences.dart' as _i961;
 import 'package:albaladyaa/core/storage/storage.dart' as _i930;
 import 'package:albaladyaa/feature/auth/cubit/login_cubit.dart' as _i521;
+import 'package:albaladyaa/feature/auth/cubit/otp_cubit.dart' as _i204;
+import 'package:albaladyaa/feature/auth/cubit/register_cubit.dart' as _i677;
 import 'package:albaladyaa/feature/auth/data/local/auth_local_data_source.dart'
     as _i474;
 import 'package:albaladyaa/feature/auth/data/remote/auth_remote_data_source.dart'
     as _i160;
+import 'package:albaladyaa/feature/auth/data/remote/municipality_remote_data_source.dart'
+    as _i685;
 import 'package:albaladyaa/feature/auth/repo/auth_repo.dart' as _i653;
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
@@ -83,6 +87,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i160.AuthRemoteDataSource>(
       () => _i160.AuthRemoteDataSourceImpl(gh<_i1018.AuthenticationClient>()),
     );
+    gh.factory<_i685.MunicipalityRemoteDataSource>(
+      () => _i685.MunicipalityRemoteDataSourceImpl(gh<_i875.DataClient>()),
+    );
     gh.factory<_i653.AuthRepo>(
       () => _i653.AuthRepoImpl(
         gh<_i160.AuthRemoteDataSource>(),
@@ -90,6 +97,16 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.factory<_i521.LoginCubit>(() => _i521.LoginCubit(gh<_i653.AuthRepo>()));
+    gh.factory<_i677.RegisterCubit>(
+      () => _i677.RegisterCubit(gh<_i653.AuthRepo>()),
+    );
+    gh.factory<_i204.OtpCubit>(
+      () => _i204.OtpCubit(
+        gh<_i653.AuthRepo>(),
+        requestId: gh<String>(),
+        phoneNumber: gh<String>(),
+      ),
+    );
     return this;
   }
 }

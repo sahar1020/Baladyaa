@@ -44,6 +44,7 @@ Map<String, dynamic> _$LoginResponseToJson(_LoginResponse instance) =>
 _RegisterBody _$RegisterBodyFromJson(Map<String, dynamic> json) =>
     _RegisterBody(
       name: json['name'] as String,
+      email: json['email'] as String,
       phone: json['phone'] as String,
       municipalityBranchId: json['municipality_branch_id'] as String,
       password: json['password'] as String,
@@ -53,6 +54,7 @@ _RegisterBody _$RegisterBodyFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$RegisterBodyToJson(_RegisterBody instance) =>
     <String, dynamic>{
       'name': instance.name,
+      'email': instance.email,
       'phone': instance.phone,
       'municipality_branch_id': instance.municipalityBranchId,
       'password': instance.password,

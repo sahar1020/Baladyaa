@@ -892,6 +892,7 @@ class __$LoginResponseCopyWithImpl<$Res>
 /// @nodoc
 mixin _$RegisterBody {
   String get name;
+  String get email;
   String get phone;
   String get municipalityBranchId;
   String get password;
@@ -916,6 +917,7 @@ mixin _$RegisterBody {
         (other.runtimeType == runtimeType &&
             other is RegisterBody &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.phone, phone) || other.phone == phone) &&
             (identical(other.municipalityBranchId, municipalityBranchId) ||
                 other.municipalityBranchId == municipalityBranchId) &&
@@ -930,6 +932,7 @@ mixin _$RegisterBody {
   int get hashCode => Object.hash(
     runtimeType,
     name,
+    email,
     phone,
     municipalityBranchId,
     password,
@@ -938,7 +941,7 @@ mixin _$RegisterBody {
 
   @override
   String toString() {
-    return 'RegisterBody(name: $name, phone: $phone, municipalityBranchId: $municipalityBranchId, password: $password, passwordConfirmation: $passwordConfirmation)';
+    return 'RegisterBody(name: $name, email: $email, phone: $phone, municipalityBranchId: $municipalityBranchId, password: $password, passwordConfirmation: $passwordConfirmation)';
   }
 }
 
@@ -951,6 +954,7 @@ abstract mixin class $RegisterBodyCopyWith<$Res> {
   @useResult
   $Res call({
     String name,
+    String email,
     String phone,
     String municipalityBranchId,
     String password,
@@ -971,6 +975,7 @@ class _$RegisterBodyCopyWithImpl<$Res> implements $RegisterBodyCopyWith<$Res> {
   @override
   $Res call({
     Object? name = null,
+    Object? email = null,
     Object? phone = null,
     Object? municipalityBranchId = null,
     Object? password = null,
@@ -981,6 +986,10 @@ class _$RegisterBodyCopyWithImpl<$Res> implements $RegisterBodyCopyWith<$Res> {
         name: null == name
             ? _self.name
             : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        email: null == email
+            ? _self.email
+            : email // ignore: cast_nullable_to_non_nullable
                   as String,
         phone: null == phone
             ? _self.phone
@@ -1098,6 +1107,7 @@ extension RegisterBodyPatterns on RegisterBody {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
       String name,
+      String email,
       String phone,
       String municipalityBranchId,
       String password,
@@ -1111,6 +1121,7 @@ extension RegisterBodyPatterns on RegisterBody {
       case _RegisterBody() when $default != null:
         return $default(
           _that.name,
+          _that.email,
           _that.phone,
           _that.municipalityBranchId,
           _that.password,
@@ -1138,6 +1149,7 @@ extension RegisterBodyPatterns on RegisterBody {
   TResult when<TResult extends Object?>(
     TResult Function(
       String name,
+      String email,
       String phone,
       String municipalityBranchId,
       String password,
@@ -1150,6 +1162,7 @@ extension RegisterBodyPatterns on RegisterBody {
       case _RegisterBody():
         return $default(
           _that.name,
+          _that.email,
           _that.phone,
           _that.municipalityBranchId,
           _that.password,
@@ -1176,6 +1189,7 @@ extension RegisterBodyPatterns on RegisterBody {
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
       String name,
+      String email,
       String phone,
       String municipalityBranchId,
       String password,
@@ -1188,6 +1202,7 @@ extension RegisterBodyPatterns on RegisterBody {
       case _RegisterBody() when $default != null:
         return $default(
           _that.name,
+          _that.email,
           _that.phone,
           _that.municipalityBranchId,
           _that.password,
@@ -1204,6 +1219,7 @@ extension RegisterBodyPatterns on RegisterBody {
 class _RegisterBody extends RegisterBody {
   const _RegisterBody({
     required this.name,
+    required this.email,
     required this.phone,
     required this.municipalityBranchId,
     required this.password,
@@ -1214,6 +1230,8 @@ class _RegisterBody extends RegisterBody {
 
   @override
   final String name;
+  @override
+  final String email;
   @override
   final String phone;
   @override
@@ -1242,6 +1260,7 @@ class _RegisterBody extends RegisterBody {
         (other.runtimeType == runtimeType &&
             other is _RegisterBody &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.phone, phone) || other.phone == phone) &&
             (identical(other.municipalityBranchId, municipalityBranchId) ||
                 other.municipalityBranchId == municipalityBranchId) &&
@@ -1256,6 +1275,7 @@ class _RegisterBody extends RegisterBody {
   int get hashCode => Object.hash(
     runtimeType,
     name,
+    email,
     phone,
     municipalityBranchId,
     password,
@@ -1264,7 +1284,7 @@ class _RegisterBody extends RegisterBody {
 
   @override
   String toString() {
-    return 'RegisterBody(name: $name, phone: $phone, municipalityBranchId: $municipalityBranchId, password: $password, passwordConfirmation: $passwordConfirmation)';
+    return 'RegisterBody(name: $name, email: $email, phone: $phone, municipalityBranchId: $municipalityBranchId, password: $password, passwordConfirmation: $passwordConfirmation)';
   }
 }
 
@@ -1279,6 +1299,7 @@ abstract mixin class _$RegisterBodyCopyWith<$Res>
   @useResult
   $Res call({
     String name,
+    String email,
     String phone,
     String municipalityBranchId,
     String password,
@@ -1300,6 +1321,7 @@ class __$RegisterBodyCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? name = null,
+    Object? email = null,
     Object? phone = null,
     Object? municipalityBranchId = null,
     Object? password = null,
@@ -1310,6 +1332,10 @@ class __$RegisterBodyCopyWithImpl<$Res>
         name: null == name
             ? _self.name
             : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        email: null == email
+            ? _self.email
+            : email // ignore: cast_nullable_to_non_nullable
                   as String,
         phone: null == phone
             ? _self.phone

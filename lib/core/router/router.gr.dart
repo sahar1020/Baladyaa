@@ -17,6 +17,7 @@ import 'package:albaladyaa/feature/auth/ui/screens/register_screen.dart' as _i5;
 import 'package:albaladyaa/feature/onbording/ui/onboarding_screen.dart' as _i3;
 import 'package:albaladyaa/feature/states/ui/screens/state_screen.dart' as _i6;
 import 'package:auto_route/auto_route.dart' as _i7;
+import 'package:flutter/material.dart' as _i8;
 
 /// generated route for
 /// [_i1.ChangePasswordScreen]
@@ -68,18 +69,54 @@ class OnboardingRoute extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.OtpScreen]
-class OtpRoute extends _i7.PageRouteInfo<void> {
-  const OtpRoute({List<_i7.PageRouteInfo>? children})
-    : super(OtpRoute.name, initialChildren: children);
+class OtpRoute extends _i7.PageRouteInfo<OtpRouteArgs> {
+  OtpRoute({
+    _i8.Key? key,
+    required String requestId,
+    required String phoneNumber,
+    List<_i7.PageRouteInfo>? children,
+  }) : super(
+         OtpRoute.name,
+         args: OtpRouteArgs(
+           key: key,
+           requestId: requestId,
+           phoneNumber: phoneNumber,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'OtpRoute';
 
   static _i7.PageInfo page = _i7.PageInfo(
     name,
     builder: (data) {
-      return const _i4.OtpScreen();
+      final args = data.argsAs<OtpRouteArgs>();
+      return _i4.OtpScreen(
+        key: args.key,
+        requestId: args.requestId,
+        phoneNumber: args.phoneNumber,
+      );
     },
   );
+}
+
+class OtpRouteArgs {
+  const OtpRouteArgs({
+    this.key,
+    required this.requestId,
+    required this.phoneNumber,
+  });
+
+  final _i8.Key? key;
+
+  final String requestId;
+
+  final String phoneNumber;
+
+  @override
+  String toString() {
+    return 'OtpRouteArgs{key: $key, requestId: $requestId, phoneNumber: $phoneNumber}';
+  }
 }
 
 /// generated route for

@@ -28,151 +28,85 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  auto_route: 9.3.0+1
+  bloc_concurrency: ^0.3.0
+  bloc_lint: ^0.2.1
+  cached_network_image: ^3.4.1
+  collection: ^1.19.1
+  dio: ^5.8.0+1
+  equatable: ^2.0.7
   flutter:
     sdk: flutter
-
-  ## Localization
-  # Provides support for internationalization and localization in Flutter apps.
+  flutter_animate: ^4.5.2
+  flutter_bloc: ^9.1.1
+  flutter_hooks: ^0.21.2
   flutter_localizations:
     sdk: flutter
-
-  ## State Management
-  # Manages application state using BLoC.
-  flutter_bloc: ^9.1.1
-
-  # Caches and restores BLoC states, enabling offline state persistence.
-  hydrated_bloc: ^10.0.0
-
-  # Provides concurrency utilities to control how events are processed in BLoC.
-  bloc_concurrency: ^0.3.0
-
-  # Easier way of managing widget's local state e.g. init & dispose of controllers.
-  flutter_hooks: ^0.21.2
-
-  ## Navigation
-  # Simplifies routing, deep linking, and strongly-typed arguments passing.
-  auto_route: 9.3.0+1
-
-  ## Networking
-  # Handles network requests and API integrations.
-  dio: ^5.8.0+1
-
-  # type safe Dio client generator.
-  retrofit: ^4.4.2
-
-  ## Caching
-  # Loads and stores network images locally for better performance.
-  cached_network_image: ^3.4.1
-
-  ## Dependency Injection
-  # Generates dependency injection boilerplate code for your Flutter app.
-  injectable: ^2.5.0
-
-  # A lightweight service locator for dependency injection in Flutter and Dart apps.
-  get_it: ^8.0.3
-
-  ## UI
-  # Renders SVG files in Flutter apps.
+  flutter_native_splash: ^2.4.6
   flutter_svg: ^2.2.0
-
-  # Adds shimmer effects to indicate loading placeholders in the UI.
+  formz: ^0.8.0
+  freezed_annotation: ^3.0.0
+  get_it: ^8.0.3
+  hooked_bloc: ^1.6.0
+  hydrated_bloc: ^10.0.0
+  icons_launcher: ^3.0.1
+  injectable: ^2.5.0
+  intl: ^0.20.2
+  json_annotation: ^4.9.0
+  logger: ^2.6.0
+  path: ^1.9.1
+  path_provider: ^2.1.5
+  permission_handler: ^12.0.1
+  pinput: ^5.0.1
+  pretty_dio_logger: ^1.4.0
+  result_dart: ^2.1.1
+  retrofit: ^4.4.2
+  rx_shared_preferences: ^4.0.0
+  rxdart: ^0.28.0
+  rxdart_ext: ^0.3.0
+  shared_preferences: ^2.5.3
   skeletonizer: ^2.1.0+1
 
-  # Adds animation utilities for creating smooth and customizable animations.
-  flutter_animate: ^4.5.2
-
-  # Provides a customizable PIN input widget.
-  pinput: ^5.0.1
-
-  # Automatically generates native splash screens for iOS and Android.
-  flutter_native_splash: ^2.4.6
-
-  ## Utilities
-  # Provides access to commonly used file system locations like temporary and app directories.
-  path_provider: ^2.1.5
-
-  # Provides common operations for manipulating paths in Dart.
-  path: ^1.9.1
-
-  # Utility functions and classes for List in dart:collections.
-  collection: ^1.19.1
-
-  # Provides extended capabilities of Dart Streams and StreamControllers.
-  rxdart: ^0.28.0
-
-  # Annotations for freezed package (see below).
-  freezed_annotation: ^3.0.0
-
-  # Annotations for json_serializable package (see below).
-  json_annotation: ^4.9.0
-
-  # Request and manage permissions.
-  permission_handler: ^12.0.1
-
-  ## App Assets
-  # Automates the process of generating and updating app launcher icons for different platforms.
-  icons_launcher: ^3.0.1
-
-  # Supports internationalization, including formatting dates, numbers, and messages.
-  intl: ^0.20.2
-
-  #Logging
-  # A logging package to log messages to the console.
-  logger: ^2.6.0
-
-  # Logs network requests and responses for debugging purposes.
-  pretty_dio_logger: ^1.4.0
-
-  # Storage
-  # Stores key-value pairs locally for persistent data storage.
-  shared_preferences: ^2.5.3
-  result_dart: ^2.1.1
-  bloc_lint: ^0.2.1
-  hooked_bloc: ^1.6.0
-  formz: ^0.8.0
-  rx_shared_preferences: ^4.0.0
-  rxdart_ext: ^0.3.0
-
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+
+  # Generates navigation boilerplate code with auto_route.
+  auto_route_generator: any
+
+  ## Code Generation
+  # A tool for generating code.
+  build_runner: ^2.5.4
+
+  ## Git Hooks
+  # Ensures commit messages follow the Conventional Commit standard.
+  commitlint_cli: ^0.8.1
+  custom_lint: ^0.7.6
+
+  # Generates code for assets, font, colors, etc.
+  flutter_gen_runner: ^5.10.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package.
   flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+
+  # Generates boilerplate code for data classes with (copyWith, when, map, ==, etc) methods (works with json_serializable).
+  freezed: ^3.0.6
+  freezed_lint: ^0.0.10
 
   # Manages Git hooks for tasks like linting and enforcing commit message standards.
   husky: ^0.1.7
 
-  ## Git Hooks
-  # Ensures commit messages follow the Conventional Commit standard.
-  commitlint_cli: ^0.8.1
-
-  ## Code Generation
-  # A tool for generating code.
-  build_runner: ^2.5.4
-
-  # Generates code for assets, font, colors, etc.
-  flutter_gen_runner: ^5.10.0
+  # Generates dependency injection boilerplate code for your Flutter app.
+  injectable_generator: ^2.7.0
 
   # Generates boilerplate code for converting Dart objects to and from JSON.
   json_serializable: ^6.9.5
 
-  # Generates boilerplate code for data classes with (copyWith, when, map, ==, etc) methods (works with json_serializable).
-  freezed: ^3.0.6
-
-  # Generates dependency injection boilerplate code for your Flutter app.
-  injectable_generator: ^2.7.0
-
   # Generates Dio boilerplate code with retrofit.
   retrofit_generator: ^9.2.0
-
-  # Generates navigation boilerplate code with auto_route.
-  auto_route_generator: any
-  custom_lint: ^0.7.6
-  freezed_lint: ^0.0.10
 
 flutter_gen:
   output: lib/gen/
@@ -186,8 +120,6 @@ flutter:
   assets:
     - assets/icons/
     - assets/splash.png
-
-
 
   fonts:
     - family: Zain

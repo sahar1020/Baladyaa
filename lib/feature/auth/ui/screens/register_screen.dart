@@ -1,124 +1,204 @@
-import 'package:albaladyaa/core/extensions/build_context.dart';
-import 'package:albaladyaa/core/gen/assets.gen.dart';
-import 'package:albaladyaa/feature/auth/ui/widgets/password_text_field.dart';
-import 'package:albaladyaa/feature/auth/ui/widgets/phone_text_field.dart';
-import 'package:flutter/material.dart';
+import 'package:albaladyaa/core/di/di.dart';
+import 'package:albaladyaa/core/model/municipality.dart';
+import 'package:albaladyaa/core/network/data_client.dart';
+import 'package:albaladyaa/feature/auth/cubit/register_cubit.dart';
+import 'package:albaladyaa/feature/auth/cubit/register_state.dart';
+import 'package:albaladyaa/feature/auth/ui/widgets/custom_text_field.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
-import '../widgets/app_text_form_field.dart';
+import '../../../../core/router/router.gr.dart' show OtpRoute;
 
 @RoutePage()
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
-  @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
-}
+  Future<List<MunicipalityBranch>> _fetchAllBranches(DataClient client) async {
+    final municipalitiesResp = await client.municipalities();
+    final municipalities = municipalitiesResp.data;
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController branchController = TextEditingController();
+    final futures = municipalities.map((m) => client.municipalityBranches(m.id));
+    final results = await Future.wait(futures);
+
+    return results
+        .expand<MunicipalityBranch>((r) => r.data as List<MunicipalityBranch>)
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.arrow_back, color: Colors.black),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back, color: Colors.black),
+        //   onPressed: () => context.router.pop(),
+        // ),
+        title: const Text("تسجيل حساب جديد"),
       ),
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 32),
-                SvgPicture.asset(
-                  Assets.icons.appIcon.path,
-                  height: 113,
-                  width: 113,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  context.l10n.welcome_to_my_municipality,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF1B1B21),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: BlocProvider(
+          create: (_) => RegisterCubit(injector()),
+          child: BlocListener<RegisterCubit, RegisterState>(
+            listener: (context, state) {
+              if (state.shouldNavigateToOtp) {
+                context.read<RegisterCubit>().resetNavigation();
+                context.router.replace(
+                  OtpRoute(
+                    requestId: state.verificationRequestId!,
+                    phoneNumber: state.verificationPhone!,
                   ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  context.l10n.please_enter_phone_number_and_password,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF1B1B21),
-                    letterSpacing: 0.5,
-                  ),
-                ),
-                const SizedBox(height: 32),
+                );
+              } else if (state.submissionStatus.isFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.errorMessage ?? 'فشل التسجيل')),
+                );
+              }
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
 
-                CustomTextField(
-                  hintText: context.l10n.name,
-                  helperText: context.l10n.please_enter_your_name,
-                  prefixIcon:Icon( Icons.person),
-                  keyboardType: TextInputType.name,
-                ),
-                const SizedBox(height: 16),
-
-                CustomTextField(
-                  hintText: context.l10n.municipality_branch,
-                  prefixIcon:Icon(Icons.business_outlined) ,
-
-                  // suffixIcon: Icons.search,
-                  keyboardType: TextInputType.name,
-                  dropdownItems: [
-                    "شهداء الرملية",
-                    "9 يوليو",
-                    "ذات الرمال",
-                    "المدينة الشمالية",
-                    "المدينة الجنوبية",
-                  ],
-                  onChanged: (value) {
-                    print("تم اختيار: $value");
-                  },
-                ),
-
-                const SizedBox(height: 32),
-                const PhoneTextField(),
-                const SizedBox(height: 16),
-                PasswordTextField(
-                  helperText: context.l10n.please_enter_password,
-                ),
-                const SizedBox(height: 16),
-                const PasswordTextField(),
-                const SizedBox(height: 32),
-
-                SizedBox(
-                  width: double.infinity,
-                  height: 40,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: context.colorScheme.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      context.l10n.login,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: context.colorScheme.onSecondary,
-                      ),
+                  BlocBuilder<RegisterCubit, RegisterState>(
+                    builder: (context, state) => CustomTextField(
+                      hint: 'الرجاء إدخال الاسم',
+                      helperText: 'الاسم الكامل',
+                      icon: Icons.person,
+                      errorText: state.name.isNotValid
+                          ? state.name.error
+                          : null,
+                      onChanged: (v) =>
+                          context.read<RegisterCubit>().nameChanged(v),
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-              ],
+                  const SizedBox(height: 16),
+
+                  BlocBuilder<RegisterCubit, RegisterState>(
+                    builder: (context, state) => CustomTextField(
+                      hint: 'الرجاء إدخال البريد الإلكتروني',
+                      helperText: 'البريد الإلكتروني',
+                      icon: Icons.email,
+                      keyboardType: TextInputType.emailAddress,
+                      errorText: state.email.isNotValid ? state.email.error : null,
+                      onChanged: (v) => context.read<RegisterCubit>().emailChanged(v),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  BlocBuilder<RegisterCubit, RegisterState>(
+                    builder: (context, state) => CustomTextField(
+                      hint: 'الرجاء إدخال رقم الهاتف',
+                      helperText: 'رقم الهاتف',
+                      icon: Icons.phone,
+                      keyboardType: TextInputType.phone,
+                      errorText: state.phone.isNotValid
+                          ? state.phone.error
+                          : null,
+                      onChanged: (v) =>
+                          context.read<RegisterCubit>().phoneChanged(v),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  BlocBuilder<RegisterCubit, RegisterState>(
+                    builder: (context, state) => CustomTextField(
+                      hint: 'الرجاء إدخال كلمة المرور',
+                      helperText: 'كلمة المرور',
+                      icon: Icons.lock,
+                      obscureText: true,
+                      errorText: state.password.isNotValid
+                          ? state.password.error
+                          : null,
+                      onChanged: (v) => context
+                          .read<RegisterCubit>()
+                          .passwordChanged(v),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  BlocBuilder<RegisterCubit, RegisterState>(
+                    builder: (context, state) => CustomTextField(
+                      hint: 'تأكيد كلمة المرور',
+                      helperText: 'أعد إدخال كلمة المرور',
+                      icon: Icons.lock_outline,
+                      obscureText: true,
+                      errorText: state.confirmPassword.isNotValid
+                          ? state.confirmPassword.error
+                          : null,
+                      onChanged: (v) => context
+                          .read<RegisterCubit>()
+                          .confirmPasswordChanged(v),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  BlocBuilder<RegisterCubit, RegisterState>(
+                    builder: (context, state) {
+                      return FutureBuilder<List<MunicipalityBranch>>(
+                        future: _fetchAllBranches(injector<DataClient>()),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (snapshot.hasError || !snapshot.hasData) {
+                            return const Text("فشل تحميل فروع البلديات");
+                          }
+
+                          final branches = snapshot.data!;
+
+                          return DropdownButtonFormField<String>(
+                            decoration: InputDecoration(
+                              labelText: "اختر الفرع البلدي",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            value: state.branchId,
+                            items: branches
+                                .map((b) => DropdownMenuItem<String>(
+                                      value: b.id,
+                                      child: Text(b.name),
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              if (value != null) {
+                                context
+                                    .read<RegisterCubit>()
+                                    .branchChanged(value);
+                              }
+                            },
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 32),
+
+                  BlocBuilder<RegisterCubit, RegisterState>(
+                    builder: (context, state) {
+                      return state.submissionStatus.isInProgress
+                          ? const CircularProgressIndicator()
+                          : SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: ElevatedButton(
+                                onPressed: state.isValid &&
+                                        state.branchId != null
+                                    ? () => context
+                                        .read<RegisterCubit>()
+                                        .register()
+                                    : null,
+                                child: const Text("تسجيل"),
+                              ),
+                            );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

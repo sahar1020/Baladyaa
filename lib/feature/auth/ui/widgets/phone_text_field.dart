@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class PhoneTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
-
-  const PhoneTextField({super.key, this.onChanged});
+final String? errorText;
+  const PhoneTextField({super.key, this.onChanged, this.errorText});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +15,8 @@ class PhoneTextField extends StatelessWidget {
       prefixIcon: Icon(Icons.phone),
       keyboardType: TextInputType.phone,
       onChanged: onChanged,
+      errorText: errorText,
+      
     );
   }
 }
